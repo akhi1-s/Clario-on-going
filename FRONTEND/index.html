@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Clario</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="sunburst-theme">
+  <div class="container">
+    <button aria-label="Toggle Sidebar" id="menuToggle" class="menu-btn">❯</button>
+
+    <!-- Sidebar(Left)-->
+    <aside class="sidebar">
+      <div class="theme-controls">
+        <button id="resetThemeBtn" class="reset-btn"><i class="fa-solid fa-arrow-rotate-right" style="color: #ff0000;"></i></button>
+        <select id="themeSwitcher">
+          <option value="daylight">☀️Daylight</option>
+          <option value="moonlight">🌑Moonlight</option>
+          <option value="light">💙Light</option>
+          <option value="dark">🖤Dark</option>
+          <option value="zen">💚Zen</option>
+          <option value="sunburst" selected>🧡Sunburst</option>
+        </select>
+        <button id="themeToggle" class="theme-toggle">🌓</button>
+      </div>
+      <!-- Profile Button (Top right sidebar or wherever you placed it) -->
+      <div class="profile-section">
+        <img id="profilePicBtn" class="profile-pic-btn" src="assets/App logo.jpg" alt="Profile" />
+        <input id="sidebarNameInput" type="text" placeholder="Your Name" />
+      </div>
+      <!-- Profile Modal -->
+       <div id="profileModal" class="modal hidden">
+        <div class="modal-content profile-popup">
+          <span class="close-btn" id="closeProfileModal">×</span>
+          <div id="profileDisplayArea"></div>
+          <div class="profile-actions">
+            <button id="changePicBtn" class="themed-btn">Change</button>
+            <button id="defaultPicBtn" class="themed-btn">Original</button>
+          </div>
+          <input type="file" id="uploadPicInput" accept="image/*" hidden />
+        </div>
+      </div>
+      <nav>
+        <ul>
+          <li class="active">📅 Calendar</li>
+          <li>🧾 History</li>
+          <li>⚙️ Settings</li>
+        </ul>
+      </nav>
+      <div class="sidebar-buttons">
+        <button id="resetBtn" class="danger-btn">🔁 Reset All Data</button>
+        <button class="danger-btn"><i class="fa-solid fa-right-from-bracket"></i> Log out</button>
+      </div>
+    </aside>
+
+
+
+    <!--Main(centre) + Right Pannel(right)-->
+    <div class="main-content">
+      <section id="calendarSection">
+        <!-- Main Calendar -->
+        <main class="main-calendar">
+          <div class="calendar-header with-logo">
+            <div class="calendar-left">
+              <img src="assets/website logo.jpg" alt="Logo" class="calendar-logo" />
+            </div>
+            <div class="calendar-nav">
+              <button id="prevMonth">❮</button>
+              <h2 id="monthTitle">Month</h2>
+              <button id="nextMonth">❯</button>
+            </div>
+            <div class="calendar-actions">
+              <button id="todayBtn" class="themed-btn">📆 Today</button>
+              <button id="addEventBtn" class="themed-btn">+ New Event</button>
+              <button id="printBtn" class="themed-btn">🖨️ Print</button>
+            </div>
+          </div>
+
+          <div class="search-events">
+            <input type="text" id="searchInput" placeholder="🔍 Search here..." />
+            <div id="searchResults" class="search-results"></div>
+            <select id="eventCategoryFilter">
+              <option value="all">All</option>
+              <option value="💼 Work">💼 Work</option>
+              <option value="❤️ Family">❤️ Family</option>
+              <option value="🤍 Friends">🤍 Friends</option>
+              <option value="🎧 Chill">🎧 Chill</option>
+            </select>
+          </div>
+
+          <!-- Day Headers -->
+          <div class="day-names">
+            <div>Sun</div>
+            <div>Mon</div>
+            <div>Tue</div>
+            <div>Wed</div>
+            <div>Thu</div>
+            <div>Fri</div>
+            <div>Sat</div>
+          </div>
+
+          <!-- Calendar Days -->
+          <div class="calendar-grid" id="calendarGrid"></div>
+        </main>
+      </section>
+
+
+      <section id="historySection" class="hidden">
+        <h2>📜 History</h2>
+        <p>Here you can view past events and mood logs.</p>
+        <hr>
+        <div>
+          <div class="history">
+            <h3 id="event-his" class="his-head">📅 Events</h3>
+            <div class="chart">
+              <canvas id="eventChart"></canvas>
+            </div>
+          </div>
+          <hr>
+          <div class="history">
+            <h3 id="mood-his" class="his-head">📊 Mood Log</h3>
+            <div class="chart">
+              <canvas id="moodChart"></canvas>
+            </div>
+          </div>
+          <hr>
+          <div class="set-his">
+            <button id="export-his" class="themed-btn">📤 Export data</button>
+            <button id="clearHistoryBtn" class="danger-btn">🗑️ Clear History</button>
+          </div>
+        </div>
+      </section>
+
+
+      <section id="settingsSection" class="hidden">
+        <h2>⚙️ Settings</h2>
+        <p>Personalize your experience — update your account info, adjust security settings, set your location, back up your data, and more.</p>
+        <hr>
+        <div id="accountSettings" class="settings">
+          <h3 class="settings-head">👤 Account Settings</h3>
+          <div class="settings-body">
+            <button class="sett-btn">ℹ️ Your Info</button>
+            <button class="sett-btn">🔑 Sign In / Sign Up</button>
+            <button class="sett-btn">📧 Email & Accounts</button>
+            <button class="sett-btn">🛡️ Privacy</button>
+            <button class="sett-btn">📥 Backup & Restore</button>
+          </div>
+        </div>
+        <hr>
+        <div id="timeSettings" class="settings">
+          <h3 class="settings-head">🕒 Clock Settings</h3>
+          <div class="settings-body">
+            <label>Time Format:
+              <select id="timeFormat" class="sett-btn">
+                <option value="24">24-hour</option>
+                <option value="12">12-hour (AM/PM)</option>
+              </select>
+            </label>
+            <label>⏰ Event Reminder:
+              <input type="number" value="4" class="reminder-input"/>
+              <select id="eventReminder" class="sett-btn">
+                <option>min</option>
+                <option>sec</option>
+                <option>hrs</option>
+              </select>
+            </label>
+          </div>
+        </div>
+        <hr>
+        <div id="location-settings" class="settings">
+          <h3 class="settings-head">🌍 Location</h3>
+          <div class="settings-body">
+            <label>City:
+              <select id="cityLocation" class="sett-btn">
+                <option>Patiala</option>
+                <option>Los Angeles</option>
+                <option>Berlin</option>
+              </select>
+            </label>
+            <label>State:
+              <select id="stateLocation" class="sett-btn">
+                <option>Punjab</option>
+                <option>California</option>
+                <option>Berlin</option>
+              </select>
+            </label>
+            <label>Country:
+              <select id="countryLocation" class="sett-btn">
+                <option>India</option>
+                <option>USA</option>
+                <option>Germany</option>
+              </select>
+            </label>
+          </div>
+        </div>
+        <hr>
+        <div class="set-his">
+          <button id="settSave" class="color-sett-btn">Save</button>
+        </div>
+        <div class="terms">
+          <button id="openTermsBtn" class="term-btn">📄 Terms & Conditions</button>
+          <button id="openPrivacyBtn" class="term-btn">🔒 Privacy Policy</button>
+        </div>
+      </section>
+      
+
+      <!-- Right Panel -->
+      <aside class="right-panel">
+        <div id="liveClock" class="theme-border">00:00:00</div>
+        <div class="mood-tracker">
+          <h4 class="mood">Today's Mood<span id="selectedMood" class="mood-display">😊</span></h4>
+          <div id="moodPopup" class="mood-popup hidden">
+            <!-- Extensive mood emoji set -->
+            <button>😃</button><button>😊</button><button>😍</button><button>🤩</button>
+            <button>😐</button><button>😕</button><button>😢</button><button>😭</button>
+            <button>😡</button><button>😴</button><button>🤯</button><button>😎</button>
+            <button>😇</button><button>😱</button><button>🤔</button><button>🥳</button>
+            <button>💀</button><button>🤒</button><button>🥺</button><button>😶</button>
+            <button>😬</button><button>🙄</button><button>😲</button>
+          </div>
+          <span id="weatherBox" class="weather-box">🌈 25°C</span>
+        </div>
+        <!-- <div class="resource-card">
+          <div class="prod-flex">
+            <h3 class="prod-head">Productivity</h3>
+            <h5 class="list">✅ 18 Done</h5>
+            <h5 class="list">🕓 12 Pending</h5>
+          </div>
+          <div class="progress-circle"><span>60%</span></div>
+        </div> -->
+        <div class="resource-card">
+          <div>
+            <h3 id="task-his" class="prod-head">📶 Progress</h3>
+            <div id="taskStatus" class="task-summary-text"></div>
+          </div>
+          <div class="chart task-chart-wrapper">
+            <canvas id="tasksChart" class="chart"></canvas>
+          </div>
+        </div>
+        <div class="task-section">
+          <div class="task-header">
+            <h4>📋 My Tasks</h4>
+            <button id="toggleMiniCal" title="Toggle Mini Calendar">▼</button>
+          </div>
+          <!-- Collapsible Mini Calendar -->
+          <div id="miniCalendarContainer">
+            <div class="mini-calendar" id="miniCalendar"></div>
+          </div>
+          <!-- Task Filter -->
+          <select id="taskFilter">
+            <option value="selected">Selected Date</option>
+            <option value="done">Done</option>
+            <option value="pending">Pending</option>
+            <option value="all">All</option>
+          </select>
+          <!-- Task List + Add New -->
+          <div id="taskList" class="task-list"></div>
+          <div class="new-task">
+            <input type="text" id="newTaskInput" placeholder="New task..." />
+            <button id="addTaskBtn" class="themed-btn">Add</button>
+          </div>
+        </div>
+        <!--Sticky Notes-->
+        <div class="sticky-notes">
+          <div class="sticky-header">
+            <h4 class="sticky-head">📌 Sticky Notes</h4>
+          </div>
+          <textarea id="stickyNoteArea" placeholder="Write your reminder here..."></textarea>
+        </div>
+      </aside>
+    </div>  
+  </div>
+
+
+
+  <!-- Event Modal -->
+  <div id="eventModal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <h3>Create New Event</h3>
+      <input type="hidden" id="eventIndex" />
+      <input type="text" id="eventTitle" placeholder="Event Title" />
+      <textarea id="eventDesc" placeholder="Description (optional)"></textarea>
+      <input type="date" id="eventDate" />
+      <select id="eventCategory">
+        <option>💼 Work</option>
+        <option>❤️ Family</option>
+        <option>🤍 Friends</option>
+        <option>🎧 Chill</option>
+      </select>
+      <button id="saveEvent" class="themed-btn">Save</button>
+      <button id="deleteEvent" class="danger" style="display: none;">Delete</button>
+    </div>
+  </div>
+  <!-- Delete Event Confirmation Modal -->
+  <div id="deleteConfirmModal" class="modal hidden">
+    <div class="modal-content">
+      <h3 id="confirmModalMessage">Are you sure?</h3>
+      <div class="confirm-buttons">
+        <button id="confirmDeleteBtn" class="danger">Delete</button>
+        <button id="cancelDeleteBtn" class="themed-btn">Cancel</button>
+      </div>
+    </div>
+  </div>
+  <div id="legalModal" class="custom-modal hidden">
+    <div class="modal-content">
+      <span id="closeLegalModal" class="close-btn">✖</span>
+      <h2 id="legalTitle">Title</h2>
+      <div id="legalContent" class="modal-text scrollable"></div>
+    </div>
+  </div>
+
+
+
+  <!-- Notification Toast -->
+  <div id="notification" class="toast hidden">Saved!</div>
+  <!-- Confetti Canvas -->
+  <canvas id="confettiCanvas" class="hidden"></canvas>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="../DATA-VIZUALIZATION/chart.js" defer></script>
+  <script src="../FRONTEND/script.js" defer></script>
+  <script>
+    renderTaskChart();
+    renderMoodChart();
+    renderEventChart();
+  </script>
+</body>
+</html>
